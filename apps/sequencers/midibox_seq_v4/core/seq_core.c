@@ -1271,7 +1271,11 @@ s32 SEQ_CORE_Tick(u32 bpm_tick, s8 export_track, u8 mute_nonloopback_tracks)
             if( p->type != NoteOn ) {
 	      // apply Pre-FX
 	      if( !no_fx ) {
-		SEQ_LFO_Event(track, e);
+		SEQ_HUMANIZE_Event(track, t->step, e);
+
+		if( !robotize_flags.NOFX ) {
+                  SEQ_LFO_Event(track, e);
+                }
 	      }
 
             } else if( p->note && p->velocity && (e->len >= 0) ) {

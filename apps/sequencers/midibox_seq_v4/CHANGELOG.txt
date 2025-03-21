@@ -26,6 +26,8 @@ MIDIboxSEQ V4.098
 
    o fixed unintended Ctrl layer events in Edit screen
 
+   o fixed CC Humanize Fx
+
 
 MIDIboxSEQ V4.097
 ~~~~~~~~~~~~~~~~~
