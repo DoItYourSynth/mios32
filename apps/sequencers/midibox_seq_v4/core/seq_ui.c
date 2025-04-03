@@ -1336,13 +1336,15 @@ static s32 SEQ_UI_Button_Bookmark(s32 depressed)
     seq_ui_button_state.BOOKMARK = depressed ? 0 : 1;
   }
 
-  if( seq_ui_button_state.BOOKMARK ) {
-    if( ui_page != SEQ_UI_PAGE_BOOKMARKS )
-      ui_bookmarks_prev_page = ui_page;
-    SEQ_UI_PageSet(SEQ_UI_PAGE_BOOKMARKS);
-  } else {
-    if( ui_page == SEQ_UI_PAGE_BOOKMARKS )
-      SEQ_UI_PageSet(ui_bookmarks_prev_page);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    if( seq_ui_button_state.BOOKMARK ) {
+      if( ui_page != SEQ_UI_PAGE_BOOKMARKS )
+        ui_bookmarks_prev_page = ui_page;
+      SEQ_UI_PageSet(SEQ_UI_PAGE_BOOKMARKS);
+    } else {
+      if( ui_page == SEQ_UI_PAGE_BOOKMARKS )
+        SEQ_UI_PageSet(ui_bookmarks_prev_page);
+    }
   }
 
   return 0; // no error
@@ -1453,7 +1455,10 @@ static s32 SEQ_UI_Button_Mute(s32 depressed)
       seq_ui_sel_view = prev_sel_view;
   }
 
-  seq_ui_button_state.MUTE_PRESSED = depressed ? 0 : 1;
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    // note: this means that parameter layers can't be muted with this simplified handling
+    seq_ui_button_state.MUTE_PRESSED = depressed ? 0 : 1;
+  }
 
 #if 0
   // doesn't really work since MUTE button also selects layer mutes when pressed
@@ -1475,7 +1480,9 @@ static s32 SEQ_UI_Button_Mute(s32 depressed)
 #else
   if( depressed ) return -1; // ignore when button depressed
 
-  SEQ_UI_PageSet(SEQ_UI_PAGE_MUTE);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    SEQ_UI_PageSet(SEQ_UI_PAGE_MUTE);
+  }
 #endif
 
   return 0; // no error
@@ -1537,12 +1544,14 @@ static s32 SEQ_UI_Button_Phrase(s32 depressed)
       seq_ui_sel_view = prev_sel_view;
   }
 
-  seq_ui_button_state.PHRASE_PRESSED = depressed ? 0 : 1;
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    seq_ui_button_state.PHRASE_PRESSED = depressed ? 0 : 1;
 
-  if( depressed ) return -1; // ignore when button depressed
+    if( depressed ) return -1; // ignore when button depressed
 
-  SEQ_UI_PageSet(SEQ_UI_PAGE_SONG);
-
+    SEQ_UI_PageSet(SEQ_UI_PAGE_SONG);
+  }
+  
   return 0; // no error
 }
 
@@ -1651,12 +1660,14 @@ static s32 SEQ_UI_Button_StepView(s32 depressed)
     seq_ui_button_state.STEP_VIEW = depressed ? 0 : 1;
   }
 
-  if( seq_ui_button_state.STEP_VIEW ) {
-    ui_stepview_prev_page = ui_page;
-    SEQ_UI_PageSet(SEQ_UI_PAGE_STEPSEL);
-  } else {
-    if( ui_page == SEQ_UI_PAGE_STEPSEL )
-      SEQ_UI_PageSet(ui_stepview_prev_page);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    if( seq_ui_button_state.STEP_VIEW ) {
+      ui_stepview_prev_page = ui_page;
+      SEQ_UI_PageSet(SEQ_UI_PAGE_STEPSEL);
+    } else {
+      if( ui_page == SEQ_UI_PAGE_STEPSEL )
+        SEQ_UI_PageSet(ui_stepview_prev_page);
+    }
   }
 
   return 0; // no error
@@ -1731,12 +1742,14 @@ static s32 SEQ_UI_Button_TrackSel(s32 depressed)
     seq_ui_button_state.TRACK_SEL = depressed ? 0 : 1;
   }
 
-  if( seq_ui_button_state.TRACK_SEL ) {
-    ui_tracksel_prev_page = ui_page;
-    SEQ_UI_PageSet(SEQ_UI_PAGE_TRACKSEL);
-  } else {
-    if( ui_page == SEQ_UI_PAGE_TRACKSEL )
-      SEQ_UI_PageSet(ui_tracksel_prev_page);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    if( seq_ui_button_state.TRACK_SEL ) {
+      ui_tracksel_prev_page = ui_page;
+      SEQ_UI_PageSet(SEQ_UI_PAGE_TRACKSEL);
+    } else {
+      if( ui_page == SEQ_UI_PAGE_TRACKSEL )
+        SEQ_UI_PageSet(ui_tracksel_prev_page);
+    }
   }
 
   return 0; // no error
@@ -1950,14 +1963,16 @@ static s32 SEQ_UI_Button_ParLayerSel(s32 depressed)
     seq_ui_button_state.PAR_LAYER_SEL = depressed ? 0 : 1;
   }
 
-  if( seq_ui_button_state.PAR_LAYER_SEL ) {
-    if( ui_page != SEQ_UI_PAGE_PARSEL ) {
-      ui_parlayer_prev_page = ui_page;
-      SEQ_UI_PageSet(SEQ_UI_PAGE_PARSEL);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    if( seq_ui_button_state.PAR_LAYER_SEL ) {
+      if( ui_page != SEQ_UI_PAGE_PARSEL ) {
+        ui_parlayer_prev_page = ui_page;
+        SEQ_UI_PageSet(SEQ_UI_PAGE_PARSEL);
+      }
+    } else {
+      if( ui_page == SEQ_UI_PAGE_PARSEL )
+        SEQ_UI_PageSet(ui_parlayer_prev_page);
     }
-  } else {
-    if( ui_page == SEQ_UI_PAGE_PARSEL )
-      SEQ_UI_PageSet(ui_parlayer_prev_page);
   }
 
   // set/clear encoder fast function if required
@@ -2077,14 +2092,16 @@ static s32 SEQ_UI_Button_TrgLayerSel(s32 depressed)
     seq_ui_button_state.TRG_LAYER_SEL = depressed ? 0 : 1;
   }
 
-  if( seq_ui_button_state.TRG_LAYER_SEL ) {
-    if( ui_page != SEQ_UI_PAGE_TRGSEL ) {
-      ui_trglayer_prev_page = ui_page;
-      SEQ_UI_PageSet(SEQ_UI_PAGE_TRGSEL);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    if( seq_ui_button_state.TRG_LAYER_SEL ) {
+      if( ui_page != SEQ_UI_PAGE_TRGSEL ) {
+        ui_trglayer_prev_page = ui_page;
+        SEQ_UI_PageSet(SEQ_UI_PAGE_TRGSEL);
+      }
+    } else {
+      if( ui_page == SEQ_UI_PAGE_TRGSEL )
+        SEQ_UI_PageSet(ui_trglayer_prev_page);
     }
-  } else {
-    if( ui_page == SEQ_UI_PAGE_TRGSEL )
-      SEQ_UI_PageSet(ui_trglayer_prev_page);
   }
 
   return 0; // no error
@@ -2193,14 +2210,16 @@ static s32 SEQ_UI_Button_InsSel(s32 depressed)
     seq_ui_button_state.INS_SEL = depressed ? 0 : 1;
   }
 
-  if( seq_ui_button_state.INS_SEL ) {
-    if( ui_page != SEQ_UI_PAGE_INSSEL ) {
-      ui_inssel_prev_page = ui_page;
-      SEQ_UI_PageSet(SEQ_UI_PAGE_INSSEL);
+  if( !seq_hwcfg_button_beh.simplified_antilog_frontpanel ) {
+    if( seq_ui_button_state.INS_SEL ) {
+      if( ui_page != SEQ_UI_PAGE_INSSEL ) {
+        ui_inssel_prev_page = ui_page;
+        SEQ_UI_PageSet(SEQ_UI_PAGE_INSSEL);
+      }
+    } else {
+      if( ui_page == SEQ_UI_PAGE_INSSEL )
+        SEQ_UI_PageSet(ui_inssel_prev_page);
     }
-  } else {
-    if( ui_page == SEQ_UI_PAGE_INSSEL )
-      SEQ_UI_PageSet(ui_inssel_prev_page);
   }
 
   return 0; // no error
