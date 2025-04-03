@@ -28,6 +28,9 @@ MIDIboxSEQ V4.098
 
    o fixed CC Humanize Fx
 
+   o "auto-select unmuted track" option now also works for 2nd GP row of the 
+     Antilog Frontpanel as intended 
+
 
 MIDIboxSEQ V4.097
 ~~~~~~~~~~~~~~~~~
