@@ -201,6 +201,7 @@ s32 SEQ_UI_Init(u32 mode)
   seq_ui_options.ALL = 0;
   seq_ui_options.PRINT_TRANSPOSED_NOTES = 1;
   seq_ui_options.SELECT_UNMUTED_TRACK = 1;
+  seq_ui_options.ALL_RELATIVE = 1;
 
   ui_hold_msg_ctr = 0;
   ui_msg_ctr = 0;
@@ -1600,15 +1601,22 @@ static s32 SEQ_UI_Button_Fast2(s32 depressed)
 
 static s32 SEQ_UI_Button_All(s32 depressed)
 {
-  seq_ui_button_state.CHANGE_ALL_STEPS_SAME_VALUE = depressed ? 0 : 1;
-
   if( seq_hwcfg_button_beh.all ) {
     // toggle mode
-    if( depressed ) return -1;
-    seq_ui_button_state.CHANGE_ALL_STEPS ^= 1;
+    if( !depressed ) {
+      seq_ui_button_state.CHANGE_ALL_STEPS ^= 1;
+    }
   } else {
     // set mode
     seq_ui_button_state.CHANGE_ALL_STEPS = depressed ? 0 : 1;
+  }
+
+  if( !seq_ui_options.ALL_RELATIVE ) {
+    // if users don't like ramps they can disable it in the options menu
+    seq_ui_button_state.CHANGE_ALL_STEPS_SAME_VALUE = seq_ui_button_state.CHANGE_ALL_STEPS;
+  } else {
+    // toggle ramp mode - note that this will only work if toggle function is also enabled for ALL button
+    seq_ui_button_state.CHANGE_ALL_STEPS_SAME_VALUE = depressed ? 0 : 1;
   }
 
   return 0; // no error

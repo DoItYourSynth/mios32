@@ -416,7 +416,7 @@ static s32 Encoder_Handler(seq_ui_encoder_t encoder, s32 incrementer)
 	if( !seq_ui_button_state.CHANGE_ALL_STEPS && !seq_ui_button_state.CHANGE_ALL_STEPS_SAME_VALUE ) {
 	  ui_selected_step = changed_step;
 	} else {
-	  if( ui_selected_step != changed_step )
+	  if( ui_selected_step != changed_step && seq_ui_options.ALL_RELATIVE ) // can be disabled with ALL_RELATIVE = 0 for easier handling w/o ramp support
 	    edit_ramp = 1;
 	}
       }

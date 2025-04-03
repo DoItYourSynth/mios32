@@ -22,6 +22,9 @@ MIDIboxSEQ V4.098
       
    o Edit: value changes on Nth1/Nth2 parameter layers only select supported (meaningful) value ranges
       
+   o new option 15/34 "ALL allows relative changes/ramps" can be used to disable these (existing) features
+     for users who don't need such enhanced editing capabilities and prefer simplified ALL button handling
+
    o fixed crash when TPD is used in combination with "MIDI Section Control" feature
 
    o fixed unintended Ctrl layer events in Edit screen
