@@ -1278,7 +1278,7 @@ s32 SEQ_CORE_Tick(u32 bpm_tick, s8 export_track, u8 mute_nonloopback_tracks)
                 }
 	      }
 
-            } else if( p->note && p->velocity && (e->len >= 0) ) {
+            } else if( p->velocity && (e->len >= 0) ) {
 	      // Note Event
 
 	      // groove it
@@ -1864,6 +1864,9 @@ s32 SEQ_CORE_Transpose(u8 track, u8 instrument, seq_core_trk_t *t, seq_cc_trk_t 
     return -1;
 
   int note = is_cc ? p->value : p->note;
+
+  if( !is_cc && p->note == 0 ) // before transpose: ensure that velocity is 0 in case no note should be played (original note is 0)
+    p->velocity = 0;           // this allows to transpose to note 0 (c-2) and get it played, and ensures that disabled notes are not played
 
   int inc_oct = tcc->transpose_oct;
   if( inc_oct >= 8 )
